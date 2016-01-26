@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text"
+           id="username"
+           class="form-control"
+           autofocus
+           placeholder="Username"
+           required
+           maxlength="20"
+           ng-model="username"
+           ng-keypress="keyPressed($event)"
+           allowed-chars/>
+  </div>
+</div>
+<div class="row">
+  <button class="btn btn-block btn-primary"
+          ng-disabled="!username || (username === usernameOriginal)"
+          ng-click="updateUsername()"
+      >Update
+  </button>
+</div>

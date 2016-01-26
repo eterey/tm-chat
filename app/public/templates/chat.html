@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-md-12">
+
+    <div class="page-header">
+      <chat-title
+          user="user"
+          channel="channel"
+          invite-link="inviteLink"
+          leave-channel="leaveChannel()">
+      </chat-title>
+    </div>
+
+    <div class="row">
+      <chat-text chat-text="chatText"></chat-text>
+      <chat-users users="users"></chat-users>
+    </div>
+
+    <div class="row">
+      <chat-message
+          channel="channel"
+          username="user.username"
+          focus-send-message="focusSendMessage">
+      </chat-message>
+    </div>
+
+  </div>
+</div>

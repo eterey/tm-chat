@@ -1,0 +1,66 @@
+/*top nav*/
+body {
+  padding-top: 50px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+/*ui bootstrap*/
+.nav, .pagination, .carousel, .panel-title a {
+  cursor: pointer;
+}
+
+.chat-text {
+  border: 1px solid black;
+  border-bottom: none;
+  background-color: #fdfdfd;
+}
+
+.chat-users {
+  border: 1px solid black;
+  border-bottom: none;
+  height: 400px;
+}
+
+.chat-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
+.chat-contents {
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: absolute;
+  bottom: 0;
+  max-height: 400px;
+  vertical-align: bottom;
+  width: 100%;
+}
+
+.text-copied {
+  -webkit-animation: copied-anim 1s;
+  animation: copied-anim 1s;
+  opacity: 0;
+}
+
+@-webkit-keyframes copied-anim {
+  50% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0
+  }
+}
+
+@keyframes copied-anim {
+  50% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0
+  }
+}

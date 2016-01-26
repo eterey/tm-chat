@@ -64,7 +64,6 @@ class Chat {
     });
   }
 
-
   addMessage(channelName, text, username) {
     return this.messages.addMessage(channelName, text, username);
   }
@@ -204,6 +203,12 @@ class Chat {
       });
       return false;
     }
+    this.removeUserFromAllChannels(socket, user, err => {
+      if (err) {
+        return false;
+      }
+      this.joinChannel(socket, user, channelReq);
+    });
   }
 
   handleChannelJoin(socket, userReq, channelReq) {
@@ -223,6 +228,12 @@ class Chat {
       });
       return false;
     }
+    this.removeUserFromAllChannels(socket, user, err => {
+      if (err) {
+        return false;
+      }
+      this.joinChannel(socket, user, channelReq);
+    });
   }
 
   joinChannel(socket, user, channelReq) {

@@ -11,7 +11,6 @@
     .controller('ChannelCtrl', [
       '$scope', '$location', 'Storage', '$timeout',
       function ($scope, $location, Storage, $timeout) {
-
         var user = Storage.user.get();
 
         $scope.channel = {
@@ -97,6 +96,8 @@
         });
 
         $scope.$on('channel left', function (event, channel) {
+          // TODO: Leave channel
+          console.info('Leave channel:', channel);
           Storage.channel.set({});
           Flags.joinedChannel = false;
           $location.path('/channel');
@@ -107,7 +108,6 @@
     .controller('ProfileCtrl', [
       '$scope', 'ChatSocket', 'Storage', '$location', 'Popup',
       function ($scope, ChatSocket, Storage, $location, Popup) {
-
         var user = Storage.user.get();
 
         $scope.username = user.username;
@@ -142,5 +142,4 @@
         };
       }
     ]);
-
 })(angular, socket);

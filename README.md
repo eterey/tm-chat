@@ -6,3 +6,4 @@ Simple web-chat based on the MEAN stack.
 
 Install: `npm install`  
 Start: `npm start`
+Test: `npm test`

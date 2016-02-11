@@ -6,28 +6,29 @@
     .service('ChatSocket', [
       function () {
         return {
-          'user': {
-            'create': function () {
+          user: {
+            create: function () {
               socket.emit('create user');
             },
-            'known': function (user) {
+            known: function (user) {
               socket.emit('known user', user);
             },
-            'update': function (uuid, newUsername) {
+            update: function (uuid, newUsername) {
               socket.emit('update user', uuid, newUsername);
             }
           },
-          'channel': {
-            'create': function (channel) {
-
+          channel: {
+            create: function (channel) {
+              // TODO: Handle this action
+              console.info('Create channel:', channel);
             },
-            'join': function (user, channel) {
+            join: function (user, channel) {
               socket.emit('join channel', user, channel);
             },
-            'getMessages': function (channel) {
+            getMessages: function (channel) {
               socket.emit('get messages', channel);
             },
-            'getUsers': function (channelName) {
+            getUsers: function (channelName) {
               socket.emit('get channel users list', channelName);
             }
           }
@@ -77,9 +78,7 @@
               });
             }
 
-            if (!channel) {
-              $location.path('/');
-            } else {
+            if (channel) {
               if (!user || !user.uuid) {
                 $rootScope.$on('user created', function (event, user) {
                   joinChannel(channel, pass, user);
@@ -87,6 +86,8 @@
               } else {
                 joinChannel(channel, pass, user);
               }
+            } else {
+              $location.path('/');
             }
           }
         };
@@ -151,5 +152,4 @@
         };
       }
     ]);
-
 })(angular, socket);

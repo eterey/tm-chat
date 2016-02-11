@@ -2,7 +2,6 @@
 
 import moment from 'moment';
 
-
 class Message {
   constructor(text, username) {
     this.date = moment().format('D MMM HH:mm:ss');
@@ -34,7 +33,7 @@ class Messages {
 
   addMessage(channelName, text, username) {
     this.createArray(channelName);
-    let message = new Message(text, username);
+    const message = new Message(text, username);
     this.messages[channelName].push(message);
     if (this.messages[channelName].length > this.limit) {
       this.messages[channelName].shift();
@@ -44,8 +43,8 @@ class Messages {
 
   getMessages(channelName) {
     this.createArray(channelName);
-    let result = [];
-    for (let message of this.messages[channelName]) {
+    const result = [];
+    for (const message of this.messages[channelName]) {
       result.push(message.getMessage());
     }
     return result;

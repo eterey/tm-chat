@@ -36,7 +36,7 @@
 
         .when('/join/:channel/:pass?', {
           controller: 'ChatCtrl',
-          template: " "
+          template: ''
         })
 
         .otherwise({redirectTo: '/'});
@@ -65,19 +65,17 @@
               ChatSocket.user.known(usr);
               ChatSocket.channel.join(usr, chan);
             }
+          } else if (!user || !user.uuid) {
+            Storage.user.set({});
+            Storage.channel.set({});
+            socket.emit('create user');
           } else {
-            if (!user || !user.uuid) {
-              Storage.user.set({});
-              Storage.channel.set({});
-              socket.emit('create user');
-            } else {
-              socket.emit('known user', user);
-              if (channel && channel.name) {
-                $rootScope.$apply(function () {
-                  $location.path('/chat');
-                });
-                socket.emit('join channel', user, channel);
-              }
+            socket.emit('known user', user);
+            if (channel && channel.name) {
+              $rootScope.$apply(function () {
+                $location.path('/chat');
+              });
+              socket.emit('join channel', user, channel);
             }
           }
           socket.on('disconnect', function () {
@@ -87,7 +85,6 @@
             disconnectedBefore = true;
             Popup.show('Error', 'You have been disconnected! Please wait or refresh the page.');
           });
-
         });
 
         socket.on('joined channel', function (channel) {
@@ -154,7 +151,6 @@
         socket.on('error', function (err) {
           console.error(err);
         });
-
       }
     ])
 
@@ -163,5 +159,4 @@
         joinedChannel: false
       };
     });
-
 })(angular, socket);

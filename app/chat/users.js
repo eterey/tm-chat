@@ -27,7 +27,7 @@ class User {
   }
 
   removeChannel(name) {
-    let index = this.channels.indexOf(name);
+    const index = this.channels.indexOf(name);
     if (index !== -1) {
       this.channels.splice(index, 1);
     }
@@ -59,7 +59,7 @@ class Users {
   }
 
   removeUser(uuid) {
-    let user = this.getUser(uuid);
+    const user = this.getUser(uuid);
     delete this.users[user.uuid];
     delete this.sockets[user.socketId];
   }

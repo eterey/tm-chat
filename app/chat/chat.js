@@ -11,7 +11,7 @@ class Chat {
     if (!socket) {
       throw new Error('Invalid Chat parameters!');
     }
-    let messagesLimit = 100;
+    const messagesLimit = 100;
     this.io = socket;
     this.channels = new Channels();
     this.users = new Users();
@@ -93,7 +93,7 @@ class Chat {
       if (err) {
         this.socketError(socket, {
           type: 'leave channel err',
-          text: 'Could not leave channel ' + channelName + '! Error: ' + err
+          text: `Could not leave channel ${channelName}! Error: ${err}`
         });
         return done(err);
       }
@@ -108,7 +108,7 @@ class Chat {
       return false;
     }
 
-    let user = this.findUserBySocketId(socket.id);
+    const user = this.findUserBySocketId(socket.id);
     if (!user || !user.uuid) {
       return false;
     }
@@ -134,7 +134,7 @@ class Chat {
   }
 
   sendMessageToChannel(channelName, text) {
-    let message = this.messages.addMessage(channelName, text);
+    const message = this.messages.addMessage(channelName, text);
     this.io.to(channelName).emit(
       'new channel message',
       message.getMessage()
@@ -150,7 +150,7 @@ class Chat {
   }
 
   removeUserFromAllChannels(socket, user, done) {
-    let channels = this.getUserChannels(user.uuid);
+    const channels = this.getUserChannels(user.uuid);
     let counter = channels.length;
     if (counter === 0) {
       return done();
@@ -161,8 +161,8 @@ class Chat {
         if (err) {
           return done(err);
         }
-        this.sendMessageToChannel(channel, user.getName() + ' left');
-        let users = this.getChannelUsers(channel);
+        this.sendMessageToChannel(channel, `${user.getName()} left`);
+        const users = this.getChannelUsers(channel);
         this.io.to(channel).emit('channel users list', users);
         counter--;
         if (counter === 0) {
@@ -173,7 +173,7 @@ class Chat {
   }
 
   getChannelUsers(channelName) {
-    let users = [];
+    const users = [];
     this.channels.getChannel(channelName).getUsers().forEach(uuid => {
       users.push(this.users.getUser(uuid).getName());
     });
@@ -191,11 +191,11 @@ class Chat {
     if (this.channelExists(channelReq.name)) {
       this.socketError(socket, {
         type: 'channel exists',
-        text: 'Channel ' + channelReq.name + ' already exists!'
+        text: `Channel ${channelReq.name} already exists!`
       });
       return false;
     }
-    let user = this.findUserBySocketId(socket.id);
+    const user = this.findUserBySocketId(socket.id);
     if (!user) {
       this.socketError(socket, {
         type: 'create channel err',
@@ -219,12 +219,12 @@ class Chat {
       });
       return false;
     }
-    let user = this.users.getUser(userReq.uuid);
-    let channel = this.channels.getChannel(channelReq.name);
+    const user = this.users.getUser(userReq.uuid);
+    const channel = this.channels.getChannel(channelReq.name);
     if (channel && !channel.validatePass(channelReq.password)) {
       this.socketError(socket, {
         type: 'join channel err',
-        text: 'Could not join channel ' + channel.getName() + '! Wrong password!'
+        text: `Could not join channel ${channel.getName()}! Wrong password!`
       });
       return false;
     }
@@ -241,27 +241,27 @@ class Chat {
       if (err) {
         this.socketError(socket, {
           type: 'join channel err',
-          text: 'Could not join channel "' + channelReq.name + '"! Error: ' + err
+          text: `Could not join channel ${channelReq.name}! Error: ${err}`
         });
         return false;
       }
       if (!this.channelExists(channelReq.name)) {
         this.addChannel(channelReq);
       }
-      let channel = this.channels.getChannel(channelReq.name);
+      const channel = this.channels.getChannel(channelReq.name);
       this.addUserToChannel(user.getUuid(), channel.getName());
-      this.sendMessageToChannel(channel.getName(), user.getName() + ' joined');
+      this.sendMessageToChannel(channel.getName(), `${user.getName()} joined`);
       socket.emit('joined channel', {
         name: channel.getName(),
         password: channel.getPassword()
       });
-      let users = this.getChannelUsers(channel.getName());
+      const users = this.getChannelUsers(channel.getName());
       this.io.to(channel.getName()).emit('channel users list', users);
     });
   }
 
   handleNewMessage(message) {
-    let m = this.addMessage(message.channel, message.text, message.user);
+    const m = this.addMessage(message.channel, message.text, message.user);
     this.io.to(message.channel).emit(
       'new message',
       m.getMessage()
@@ -269,15 +269,15 @@ class Chat {
   }
 
   handleCreateUser(socket) {
-    let uuid = hat();//makes the user unique
-    let user = {
-      uuid: uuid,
-      username: 'Anonymous' + (Math.floor(Math.random() * 9000) + 1000),
+    const uuid = hat();  // makes the user unique
+    const user = {
+      uuid,
+      username: `Anonymous ${(Math.floor(Math.random() * 9000) + 1000)}`,
       socketId: socket.id
     };
     this.addUser(user);
     socket.emit('user created', {
-      uuid: uuid,
+      uuid,
       username: this.users.getUser(uuid).getName()
     });
   }
@@ -302,11 +302,11 @@ class Chat {
     if (!this.channelExists(channelName)) {
       this.socketError(socket, {
         type: 'get channel users list err',
-        text: 'Could not get users list for "' + channelName + '"! Channel doesn\'t exist!'
+        text: `Could not get users list for ${channelName}! Channel doesn't exist!`
       });
       return false;
     }
-    let users = this.getChannelUsers(channelName);
+    const users = this.getChannelUsers(channelName);
     socket.emit('channel users list', users);
   }
 
@@ -315,38 +315,38 @@ class Chat {
       if (err) {
         this.socketError(socket, {
           type: 'leave channel err',
-          text: 'Could not leave channel ' + channelName + '! Error: ' + err
+          text: `Could not leave channel ${channelName}! Error: ${err}`
         });
         return false;
       }
 
-      let user = this.users.getUser(userReq.uuid);
+      const user = this.users.getUser(userReq.uuid);
 
       this.removeUserFromChannel(socket, user.getUuid(), channelName, err => {
         if (err) {
           return false;
         }
         socket.emit('channel left', channelName);
-        this.sendMessageToChannel(channelName, user.getName() + ' left');
-        let users = this.getChannelUsers(channelName);
+        this.sendMessageToChannel(channelName, `${user.getName()} left`);
+        const users = this.getChannelUsers(channelName);
         this.io.to(channelName).emit('channel users list', users);
       });
     });
   }
 
   handleUpdateUser(socket, uuid, newUsername) {
-    let user = this.users.getUser(uuid);
-    let oldUsername = user.getName();
+    const user = this.users.getUser(uuid);
+    const oldUsername = user.getName();
     user.setName(newUsername);
     socket.emit('user updated', uuid, oldUsername, newUsername);
-    let channels = this.getUserChannels(uuid);
+    const channels = this.getUserChannels(uuid);
     channels.forEach(channel => {
-      this.sendMessageToChannel(channel, oldUsername + ' renamed to ' + newUsername);
+      this.sendMessageToChannel(channel, `${oldUsername} renamed to ${newUsername}`);
     });
   }
 
   handleGetMessages(socket, channelName) {
-    let messages = this.getMessages(channelName);
+    const messages = this.getMessages(channelName);
     socket.emit('channel messages', messages);
   }
 }

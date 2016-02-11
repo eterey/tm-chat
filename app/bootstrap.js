@@ -1,21 +1,30 @@
 'use strict';
 
 import express from 'express';
-import { Server } from 'http';
+import http from 'http';
 import socket from 'socket.io';
+import path from 'path';
 import Chat from './chat/chat';
 
-let app = express();
-let http = Server(app);
-let io = socket(http);
+const createServer = port => {
+  const app = express();
+  const server = http.createServer(app);
+  const io = socket(server);
 
-app.use(express.static(__dirname + '/public'));
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/public/index.html');
-});
+  const publicDir = path.join(__dirname, 'public');
+  app.use(express.static(publicDir));
+  app.get('/', (req, res) => {
+    const indexPage = path.join(publicDir, 'index.html');
+    res.sendFile(indexPage);
+  });
 
-http.listen(4444, () => {
-  console.info('Chat is available on port 4444.')
-});
+  port = port || 4444;
+  server.listen(port, () => {
+    console.info(`Chat is available on port ${port}.`);
+  });
 
-new Chat(io);
+  return new Chat(io);
+};
+
+// TODO: Make possible to configure port
+createServer();

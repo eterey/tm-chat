@@ -22,7 +22,7 @@ class Channel {
   }
 
   removeUser(uuid) {
-    let index = this.users.indexOf(uuid);
+    const index = this.users.indexOf(uuid);
     if (index !== -1) {
       this.users.splice(index, 1);
     }

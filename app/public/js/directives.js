@@ -184,5 +184,4 @@
         };
       }
     ]);
-
 })(angular, socket);
